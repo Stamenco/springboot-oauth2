@@ -7,8 +7,8 @@ spring:
             client-id: Iv1.1c177a3ef00c741a
             client-secret: a27adddd9de4a6d5a2ee62f98e6b1236a03df78c
           google:
-            client-id: your-google-client-id
-            client-secret: your-google-client-secret
+            client-id: 464815132016-jak56ab8m5hkq33p99ilvh9v30absa6a.apps.googleusercontent.com
+            client-secret: _DqH1KnrmrJhHGjaYBgfHEs6
 
 #logging:
 #  level:
