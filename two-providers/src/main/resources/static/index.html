@@ -4,31 +4,40 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <title>Demo</title>
-<meta name="description" content="" />
-<meta name="viewport" content="width=device-width" />
-<base href="/" />
-<link rel="stylesheet" type="text/css"
-    href="/webjars/bootstrap/css/bootstrap.min.css" />
-<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-<script type="text/javascript"
-    src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <meta name="description" content="" />
+    <meta name="google-signin-client_id" content="464815132016-jak56ab8m5hkq33p99ilvh9v30absa6a.apps.googleusercontent.com">
+    <meta name="viewport" content="width=device-width" />
+    <base href="/" />
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/authGithub.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>    <h1>Login</h1>
     <div class="container unauthenticated">
         <div>
-            With GitHub: <a href="/oauth2/authorization/github">click here</a>
+            <a class="btn-auth btn-github" href="/oauth2/authorization/github">Sign in with <b>GitHub</b></a>
         </div>
+        <br><br>
         <div>
-            With Google: <a href="/oauth2/authorization/google">click here</a>
+            With Google: <div id="signInGoogle" class="g-signin2" data-onsuccess="onSignIn"></div>
         </div>
     </div>
     <div class="container authenticated" style="display: none">
-        <h5>logged in successfully with OAuth2.0</h5>
         Logged in as: <span id="user"></span>
+        <br>
+        <span id="email"></span>
+        <br>
+        <span id="image"></span>
+        <br><br>
         <div>
             <button onClick="logout()" class="btn btn-primary">Logout</button>
         </div>
     </div>
+
+
+
     <script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
     <script type="text/javascript">
           $.ajaxSetup({
@@ -44,19 +53,43 @@
               }
             }
           });
+
+
           $.get("/user", function(data) {
+              console.log(data);
               $("#user").html(data.name);
               $(".unauthenticated").hide();
               $(".authenticated").show();
           });
+
+          //LogoutMethod
           var logout = function() {
             $.post("/logout", function() {
+
+              //google
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    alert('User signed out.');
+                });
+                //
               $("#user").html('');
               $(".unauthenticated").show();
               $(".authenticated").hide();
             })
             return true;
           }
-        </script>
+
+          //onGoogleSignIn
+          function onSignIn(googleUser) {
+              var profile = googleUser.getBasicProfile();
+              console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+              $("#user").text('Name: ' + profile.getName());
+              //$().css('Image URL: ' + profile.getImageUrl());
+              $("#email").text('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+              $(".unauthenticated").hide();
+              $(".authenticated").show();
+          }
+
+</script>
 </body>
 </html>

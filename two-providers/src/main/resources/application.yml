@@ -9,7 +9,8 @@ spring:
           google:
             client-id: 464815132016-jak56ab8m5hkq33p99ilvh9v30absa6a.apps.googleusercontent.com
             client-secret: _DqH1KnrmrJhHGjaYBgfHEs6
-
 #logging:
 #  level:
 #    org.springframework.security: DEBUG
+server:
+  port: 9090
